@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- <meta charset="UTF-8"> -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <title>Test Canvas</title>
+    <script src="HelperFunction.js"></script>
+</head>
+<body>
+    <p>canvas width = 400 x height = 400 </p>
+    <br>
+    <p>scale:</p>
+    
+    <select id="myScale">
+        <option>1</option>
+        <option>1.5</option>
+        <option>2</option>
+    </select>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button onclick="EditScale()">Enter</button>
+    <br>
+    <p id ="size"></p>
+    <canvas id="myCanvas" width="200" height="200" style="border:1px solid #000000;"></canvas>
+
+    
+    
+
+    <script>
+        // function clearMandelbrot(ctx){
+        //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // }
+
+        
+
+        function mandelbrot(c, max_iter){
+            let z = c;
+            for (let i=0; i<max_iter; i++){
+                if (z.abs()>2){
+                    return 0;
+                }
+                z = z.Nhan(z).Cong(c);
+            }
+            return 1;
+
+        }
+
+        function draw_mandelbrot(ctx, width, height, x_min, x_max, y_min, y_max, max_iter){
+            for (let x=0; x<width; x++){
+                for (let y=0; y<height; y++){
+                    let real = x_min + (x/width)*(x_max-x_min);
+                    let imag = y_min + (y/height)*(y_max-y_min);
+                    let c = new ComplexNumber(real, imag);
+
+                    let iteration = mandelbrot(c, max_iter);
+                    let color;
+                    if (iteration)
+                        color = "rgb(255, 255, 255)";
+                    else
+                        color = "rgb(0, 0, 0)";
+                    SetPixel(ctx, x, y, color);
+
+                }
+                
+                    
+            }
+        }
+
+        function EditScale(){
+            let size = document.getElementById("myScale");
+            let i = size.selectedIndex;
+            // let k = document.getElementById("size").innerHTML=size.options[i].text;
+            let k = size.options[i].text;
+            
+            k = parseFloat(k);
+            let wh;
+            if (k==1){
+                wh=200;
+            }
+            else if (k==1.5)
+                wh=300;
+            else if (k==2)
+                wh=400;
+            //clearMandelbrot(ctx);
+            
+            document.getElementById("myCanvas").width = wh;
+            document.getElementById("myCanvas").height = wh;
+            //console.log(canvas);
+            let canvas = document.getElementById("myCanvas");
+            let ctx = canvas.getContext("2d");
+            let width = canvas.width;
+            let height = canvas.height;
+            let x_min=-2;
+            let x_max=1;
+            let y_min=-1.5;
+            let y_max=1.5;
+            let max_iter=50;
+            draw_mandelbrot(ctx, width, height, x_min, x_max, y_min, y_max, max_iter);
+
+        }
+
+        
+        
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var width = canvas.width;
+        var height = canvas.height;
+        var x_min=-2;
+        var x_max=1;
+        var y_min=-1.5;
+        var y_max=1.5;
+        var max_iter=50;
+        draw_mandelbrot(ctx, width, height, x_min, x_max, y_min, y_max, max_iter);
+
+        
+       
+        // var z1 = new ComplexNumber(1, 2);
+        // var z2 = new ComplexNumber(3, 4);
+        // var z3 = new ComplexNumber();
+        // z3 = z1.Cong(z2);
+        
+        //document.getElementById("test").innerHTML= z3.real.toString()+" "+z3.imag.toString();
+
+        // var c = document.getElementById("myCanvas");
+        // var ctx = c.getContext("2d");
+        // const X1=50, Y1=50, X2=200, Y2=90;
+        // var delta_y = Y2-Y1;
+        // var delta_x = X2 - X1;
+        // var m = delta_y/delta_x;
+
+        // var x = X1;
+        // var y = Y1;
+        // for (let x = X1; x<=X2; x++){
+        //     SetPixel(ctx, x, y, "rgb(255, 0, 0)");
+        //     y+=m;
+        // }
+
+        
+
+    </script>
+    
+    
+</body>
+</html>
